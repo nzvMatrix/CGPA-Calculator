@@ -1,18 +1,19 @@
+/* Ensure the body and html can expand beyond the viewport height */
 body, html {
   font-family: Arial, sans-serif;
   background-color: #121212;
   color: #e0e0e0;
   margin: 0;
   padding: 0;
-  height: 100%; /* Ensure the body takes full height */
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  min-height: 100%; /* Allow body and html to grow with content */
 }
 
 body {
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Align items to the top */
+  align-items: flex-start; /* Align content to the top of the page */
   min-height: 100vh; /* Ensure the body can expand beyond the viewport height */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 .container {
