@@ -1,6 +1,6 @@
 # CGPA Calculator
 
-A web application to help students calculate their CGPA (Cumulative Grade Point Average) and SGPA (Semester Grade Point Average) for each semester. This tool allows users to dynamically add semesters and subjects, enter marks and credits, and then calculates the overall CGPA and SGPA.
+A web application to help students calculate their CGPA (Cumulative Grade Point Average) and SGPA (Semester Grade Point Average) for each semester. This tool allows users to dynamically add semesters and subjects, enter marks and credits and then calculates the overall CGPA and SGPA.
 
 ## Features
 
