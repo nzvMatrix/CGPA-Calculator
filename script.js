@@ -38,6 +38,8 @@ function addSemester() {
   `;
 
   semestersContainer.appendChild(semesterDiv);
+
+  document.body.style.alignItems = 'flex-start';
 }
 
 // Function to add a new subject within a semester
@@ -72,6 +74,8 @@ function addSubject(button) {
   `;
 
   subjectsContainer.appendChild(subjectDiv);
+
+  document.body.style.alignItems = 'flex-start';
 }
 
 // Function to remove a semester
@@ -148,3 +152,8 @@ function calculateResults() {
     <p>CGPA: ${cgpa.toFixed(2)}</p>
   `;
 }
+
+document.getElementById('addSemesterBtn').addEventListener('click', function() 
+{
+  addSemester();
+});
