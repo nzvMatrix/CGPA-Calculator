@@ -179,3 +179,6 @@ window.onload = loadData;
 document.getElementById('addSemesterBtn').addEventListener('click', function() {
   addSemester();
 });
+
+// Event listener for calculating CGPA
+document.getElementById('calculateBtn').addEventListener('click', calculateResults);
