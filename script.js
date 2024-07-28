@@ -1,5 +1,5 @@
 // Function to add a new semester section
-function addSemester() {
+function addSemester(semesterData = null) {
   const semestersContainer = document.getElementById('semestersContainer');
 
   const semesterDiv = document.createElement('div');
@@ -10,64 +10,50 @@ function addSemester() {
   semesterDiv.innerHTML = `
     <h3>Semester ${semesterIndex}</h3>
     <button type="button" onclick="removeSemester(this)">Remove Semester</button>
-    <div class="subjects-container">
-      <div class="subject">
-        <input type="text" id="subjectName${semesterIndex}" placeholder="Subject Name">
-        <div class="subject-details">
-          <div class="marks-container">
-            <label>Obtained Marks:</label>
-            <input type="number" id="obtainedMarks${semesterIndex}" placeholder="Obtained Marks">
-          </div>
-          <div class="marks-container">
-            <label>Max Marks:</label>
-            <input type="number" id="maxMarks${semesterIndex}" placeholder="Max Marks">
-          </div>
-          <div class="credits-container">
-            <label>Obtained Credits:</label>
-            <input type="number" id="obtainedCredits${semesterIndex}" placeholder="Obtained Credits">
-          </div>
-          <div class="credits-container">
-            <label>Max Credits:</label>
-            <input type="number" id="maxCredits${semesterIndex}" placeholder="Max Credits">
-          </div>
-        </div>
-        <button type="button" onclick="removeSubject(this)">Remove Subject</button>
-      </div>
-    </div>
+    <div class="subjects-container"></div>
     <button type="button" onclick="addSubject(this)">Add Subject</button>
   `;
 
   semestersContainer.appendChild(semesterDiv);
 
+  if (semesterData) {
+    semesterData.subjects.forEach(subjectData => addSubject(semesterDiv.querySelector('.subjects-container'), subjectData));
+  }
+
+  // Ensure content aligns to the top after adding a semester
   document.body.style.alignItems = 'flex-start';
+
+  saveData();
 }
 
 // Function to add a new subject within a semester
-function addSubject(button) {
-  const subjectsContainer = button.previousElementSibling;
+function addSubject(buttonOrContainer, subjectData = null) {
+  const subjectsContainer = buttonOrContainer instanceof HTMLElement && buttonOrContainer.classList.contains('subjects-container')
+    ? buttonOrContainer
+    : buttonOrContainer.previousElementSibling;
   const semesterIndex = Array.from(subjectsContainer.parentElement.parentElement.children).indexOf(subjectsContainer.parentElement) + 1;
 
   const subjectDiv = document.createElement('div');
   subjectDiv.classList.add('subject');
 
   subjectDiv.innerHTML = `
-    <input type="text" id="subjectName${semesterIndex}" placeholder="Subject Name">
+    <input type="text" id="subjectName${semesterIndex}" placeholder="Subject Name" value="${subjectData ? subjectData.subjectName : ''}">
     <div class="subject-details">
       <div class="marks-container">
         <label>Obtained Marks:</label>
-        <input type="number" id="obtainedMarks${semesterIndex}" placeholder="Obtained Marks">
+        <input type="number" id="obtainedMarks${semesterIndex}" placeholder="Obtained Marks" value="${subjectData ? subjectData.obtainedMarks : ''}">
       </div>
       <div class="marks-container">
         <label>Max Marks:</label>
-        <input type="number" id="maxMarks${semesterIndex}" placeholder="Max Marks">
+        <input type="number" id="maxMarks${semesterIndex}" placeholder="Max Marks" value="${subjectData ? subjectData.maxMarks : ''}">
       </div>
       <div class="credits-container">
         <label>Obtained Credits:</label>
-        <input type="number" id="obtainedCredits${semesterIndex}" placeholder="Obtained Credits">
+        <input type="number" id="obtainedCredits${semesterIndex}" placeholder="Obtained Credits" value="${subjectData ? subjectData.obtainedCredits : ''}">
       </div>
       <div class="credits-container">
         <label>Max Credits:</label>
-        <input type="number" id="maxCredits${semesterIndex}" placeholder="Max Credits">
+        <input type="number" id="maxCredits${semesterIndex}" placeholder="Max Credits" value="${subjectData ? subjectData.maxCredits : ''}">
       </div>
     </div>
     <button type="button" onclick="removeSubject(this)">Remove Subject</button>
@@ -75,18 +61,23 @@ function addSubject(button) {
 
   subjectsContainer.appendChild(subjectDiv);
 
+  // Ensure content aligns to the top after adding a subject
   document.body.style.alignItems = 'flex-start';
+
+  saveData();
 }
 
 // Function to remove a semester
 function removeSemester(button) {
   button.parentElement.remove();
   updateSemesterLabels();
+  saveData();
 }
 
 // Function to remove a subject
 function removeSubject(button) {
   button.parentElement.remove();
+  saveData();
 }
 
 // Function to update semester labels after removal
@@ -95,6 +86,7 @@ function updateSemesterLabels() {
   semesters.forEach((semester, index) => {
     semester.querySelector('h3').textContent = `Semester ${index + 1}`;
   });
+  saveData();
 }
 
 // Function to calculate GPA, CGPA, and SGPA
@@ -151,9 +143,39 @@ function calculateResults() {
     ${semesterResults}
     <p>CGPA: ${cgpa.toFixed(2)}</p>
   `;
+
+  saveData();
 }
 
-document.getElementById('addSemesterBtn').addEventListener('click', function() 
-{
+// Function to save data to localStorage
+function saveData() {
+  const semesters = [];
+  document.querySelectorAll('.semester').forEach((semester, index) => {
+    const subjects = [];
+    semester.querySelectorAll('.subject').forEach(subject => {
+      subjects.push({
+        subjectName: subject.querySelector('input[id^="subjectName"]').value,
+        obtainedMarks: subject.querySelector('input[id^="obtainedMarks"]').value,
+        maxMarks: subject.querySelector('input[id^="maxMarks"]').value,
+        obtainedCredits: subject.querySelector('input[id^="obtainedCredits"]').value,
+        maxCredits: subject.querySelector('input[id^="maxCredits"]').value
+      });
+    });
+    semesters.push({ subjects });
+  });
+  localStorage.setItem('semestersData', JSON.stringify(semesters));
+}
+
+// Function to load data from localStorage
+function loadData() {
+  const semestersData = JSON.parse(localStorage.getItem('semestersData')) || [];
+  semestersData.forEach(semesterData => addSemester(semesterData));
+}
+
+// Load data when the page is loaded
+window.onload = loadData;
+
+// Event listener for adding semesters
+document.getElementById('addSemesterBtn').addEventListener('click', function() {
   addSemester();
 });
