@@ -17,8 +17,11 @@ A web application to help students calculate their CGPA (Cumulative Grade Point 
 - **CSS:** For styling the web pages, including custom styles and animations.
 - **JavaScript:** For interactive functionalities, including dynamic data entry and calculation.
 
-## How to Use
+## How to Use and UI
 
 1. **Clone the Repository:**
    ```bash
    git clone https://github.com/nzvMatrix/cgpa-calculator.git
+
+2. **Just an Example:**
+![UI Example](assets/CGPA%20Calculator.PNG)
