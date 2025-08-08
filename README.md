@@ -11,7 +11,7 @@ A web application to help students calculate their CGPA (Cumulative Grade Point 
 - **User-Friendly Interface:** Simple and intuitive UI for ease of use.
 - **Remove Functionality:** Users can remove semesters or subjects if needed.
 
-## Technologies Used
+## Tech Stack Used
 
 - **HTML:** For the basic structure of the web pages.
 - **CSS:** For styling the web pages, including custom styles and animations.
