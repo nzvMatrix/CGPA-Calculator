@@ -1,4 +1,4 @@
-// Function to add a new semester section
+//Add a new semester section
 function addSemester(semesterData = null) {
   const semestersContainer = document.getElementById('semestersContainer');
 
@@ -20,13 +20,12 @@ function addSemester(semesterData = null) {
     semesterData.subjects.forEach(subjectData => addSubject(semesterDiv.querySelector('.subjects-container'), subjectData));
   }
 
-  // Ensure content aligns to the top after adding a semester
   document.body.style.alignItems = 'flex-start';
 
   saveData();
 }
 
-// Function to add a new subject within a semester
+//Add a new subject within a semester
 function addSubject(buttonOrContainer, subjectData = null) {
   const subjectsContainer = buttonOrContainer instanceof HTMLElement && buttonOrContainer.classList.contains('subjects-container')
     ? buttonOrContainer
@@ -61,26 +60,25 @@ function addSubject(buttonOrContainer, subjectData = null) {
 
   subjectsContainer.appendChild(subjectDiv);
 
-  // Ensure content aligns to the top after adding a subject
   document.body.style.alignItems = 'flex-start';
 
   saveData();
 }
 
-// Function to remove a semester
+//Remove a semester
 function removeSemester(button) {
   button.parentElement.remove();
   updateSemesterLabels();
   saveData();
 }
 
-// Function to remove a subject
+//Remove a subject
 function removeSubject(button) {
   button.parentElement.remove();
   saveData();
 }
 
-// Function to update semester labels after removal
+//Update semester labels after removal
 function updateSemesterLabels() {
   const semesters = document.querySelectorAll('.semester');
   semesters.forEach((semester, index) => {
@@ -89,7 +87,7 @@ function updateSemesterLabels() {
   saveData();
 }
 
-// Function to calculate GPA, CGPA, and SGPA
+//Calculate GPA, CGPA and SGPA
 function calculateResults() {
   let totalMarks = 0;
   let totalMaxMarks = 0;
@@ -110,7 +108,7 @@ function calculateResults() {
       const obtainedCredits = parseFloat(subject.querySelector('input[id^="obtainedCredits"]').value) || 0;
       const maxCredits = parseFloat(subject.querySelector('input[id^="maxCredits"]').value) || 0;
 
-      // Calculate percentage and then convert to grade points based on the percentage
+      //Calculate percentage and convert to grade points based on the percentage
       const percentage = (obtainedMarks / maxMarks) * 100;
       let gradePoints = 0;
 
@@ -133,11 +131,11 @@ function calculateResults() {
     totalCredits += semesterTotalCredits;
     totalMaxCredits += semesterTotalMaxCredits;
 
-    const sgpa = (semesterTotalCredits / semesterTotalMaxCredits); // Assuming a 10-point scale
+    const sgpa = (semesterTotalCredits / semesterTotalMaxCredits);
     semesterResults += `<p>Semester ${index + 1} SGPA: ${sgpa.toFixed(2)}</p>`;
   });
 
-  const cgpa = (totalCredits / totalMaxCredits); // Assuming a 10-point scale
+  const cgpa = (totalCredits / totalMaxCredits);
 
   document.getElementById('result').innerHTML = `
     ${semesterResults}
@@ -147,7 +145,7 @@ function calculateResults() {
   saveData();
 }
 
-// Function to save data to localStorage
+//Save data to localStorage
 function saveData() {
   const semesters = [];
   document.querySelectorAll('.semester').forEach((semester, index) => {
@@ -166,19 +164,19 @@ function saveData() {
   localStorage.setItem('semestersData', JSON.stringify(semesters));
 }
 
-// Function to load data from localStorage
+//Load data from localStorage
 function loadData() {
   const semestersData = JSON.parse(localStorage.getItem('semestersData')) || [];
   semestersData.forEach(semesterData => addSemester(semesterData));
 }
 
-// Load data when the page is loaded
+//Load data when the page is loaded
 window.onload = loadData;
 
-// Event listener for adding semesters
+//Event listener for adding semesters
 document.getElementById('addSemesterBtn').addEventListener('click', function() {
   addSemester();
 });
 
-// Event listener for calculating CGPA
+//Event listener for calculating CGPA
 document.getElementById('calculateBtn').addEventListener('click', calculateResults);
